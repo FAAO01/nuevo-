@@ -1,0 +1,50 @@
+import React, { useState } from 'react';
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+
+const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            navigate('/');
+        } catch (error) {
+            console.error('Error al iniciar sesión:', error);
+        }
+    };
+
+    return (
+        <div className="max-w-md mx-auto mt-8 p-4 border rounded-md">
+            <h2 className="text-2xl font-semibold mb-4">Iniciar sesión</h2>
+            <form onSubmit={handleLogin}>
+                <input
+                    type="email"
+                    placeholder="Correo electrónico"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full p-2 border rounded-md mb-2"
+                />
+                <input
+                    type="password"
+                    placeholder="Contraseña"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full p-2 border rounded-md mb-4"
+                />
+                <button
+                    type="submit"
+                    className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                    Iniciar sesión
+                </button>
+            </form>
+        </div>
+    );
+};
+
+export default Login;
